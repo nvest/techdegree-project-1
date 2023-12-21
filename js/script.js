@@ -19,7 +19,7 @@ const quotes = [
     source: 'Brennan',
     citation: 'Step Brothers',
     year: '2008',
-    tags: 'Birds'
+    tags: [ 'Birds' ]
   },
   {
     quote: 'That rug really tied the room together.',
@@ -31,8 +31,7 @@ const quotes = [
     quote: 'On Wednesdays, we wear pink.',
     source: 'Karen',
     citation: 'Mean Girls',
-    year: '1998',
-    tags: 'Days of the Week, Colors'
+    tags: [ 'Days of the Week', 'Colors' ]
   },
   {
     quote: 'How much cheese is too much cheese?',
@@ -64,33 +63,33 @@ function getRandomQuote() {
 
 /***
  * `randomColor` function
+ * `randomValue` = store a random value between 0 and 255
+ * `randomRGB` = create a random rgb color using 3 different values for `randomValue`
 ***/
 
-function randomColorValues() {
-  let randomNumber = Math.floor( Math.random () * 255 );
-  return randomNumber;
-};
-
-function randomColor(red, green, blue) {
-  let color = `rgb(${red}, ${green}, ${blue})`
+const randomValue = () => Math.floor( Math.random () * 256 );
+function randomRGB(value) {
+  let color = `rgb(${value()}, ${value()}, ${value()})`
   return color;
 };
 
 
 /***
  * `printQuote` function
+ * print a new quote to the page every 10 seconds
  * `quoteObject` = store a random quote object returned from the `getRandomQuote()` function.
  * `html` = store a string of html with `quote` and `source` properties.
  * concatinate citation to `html` if it exists.
  * concatinate year to `html` if it exists.
  * add a closing paragraph tag
  * replace the HTML inside the `quote-box` to the string stored in `html`
+ * style the background color of the body to a random color.
 ***/
-
+setInterval(printQuote, 10000);
 function printQuote() {
   let quoteObject = getRandomQuote();   
   let html = `
-    <p class="quote">"${quoteObject.quote}"</p>
+    <p class="quote">${quoteObject.quote}</p>
     <p class="source">${quoteObject.source}`;
   if ( 'citation' in quoteObject ) {
     html += `, <span><i>${quoteObject.citation}</i></span>`;
@@ -99,10 +98,11 @@ function printQuote() {
     html += `, <span>${quoteObject.year}</span>`;
   };
   if ( 'tags' in quoteObject ) {
-    html += `, <span>${quoteObject.tags}</span>`;
+    html += `, <span>${quoteObject.tags.join(', ')}</span>`;
   };
   html += `</p>`
   document.getElementById('quote-box').innerHTML = html; 
+  document.body.style.backgroundColor = randomRGB(randomValue);
 };
 
 
